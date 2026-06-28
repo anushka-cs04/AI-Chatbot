@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="app">
+
+    <header class="header">
+
+        <div class="logo-area">
+
+            <div class="orb">
+                <div class="orb-core"></div>
+            </div>
+
+            <div>
+
+                <h1>Nova AI</h1>
+
+                <p>Your Intelligent AI Assistant</p>
+
+            </div>
+
+        </div>
+
+        <button id="new-chat">
+
+            + New Chat
+
+        </button>
+
+    </header>
+
+
+    <main id="chat-box" class="chat-box">
+
+        <div class="message bot">
+
+            <div class="avatar bot-avatar">
+                AI
+            </div>
+
+            <div class="bubble">
+
+                <h3>Hello Anushka 👋</h3>
+
+                <p>
+
+                    Welcome to Nova AI.
+
+                    Ask me anything about programming,
+                    studies, projects or general knowledge.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <footer class="input-container">
+
+        <textarea
+                id="user-input"
+                rows="1"
+                placeholder="Message Nova AI..."></textarea>
+
+        <button id="send-btn">
+
+            ➜
+
+        </button>
+
+    </footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

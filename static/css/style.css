@@ -1,0 +1,1149 @@
+/* ==========================
+   NOVA AI - PREMIUM UI
+   PART 1
+========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --bg1:#0b1020;
+    --bg2:#10182f;
+    --glass:rgba(255,255,255,.08);
+    --glass-border:rgba(255,255,255,.12);
+
+    --primary:#6C63FF;
+    --secondary:#00D4FF;
+
+    --text:#ffffff;
+    --text-light:#c7d2fe;
+
+    --user:#4F46E5;
+    --bot:#1E293B;
+
+    --shadow:0 15px 50px rgba(0,0,0,.45);
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:linear-gradient(
+    -45deg,
+    #09111f,
+    #10172f,
+    #18284d,
+    #0d1225);
+
+    background-size:400% 400%;
+
+    animation:gradientMove 18s ease infinite;
+
+    height:100vh;
+
+    overflow:hidden;
+
+    color:white;
+
+}
+
+/* Animated Background */
+
+@keyframes gradientMove{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
+.background{
+
+position:fixed;
+
+inset:0;
+
+background:
+
+radial-gradient(circle at 20% 30%,
+rgba(108,99,255,.25),
+transparent 35%),
+
+radial-gradient(circle at 80% 20%,
+rgba(0,212,255,.18),
+transparent 30%),
+
+radial-gradient(circle at 50% 90%,
+rgba(255,255,255,.05),
+transparent 40%);
+
+filter:blur(50px);
+
+animation:floatBg 14s infinite alternate;
+
+z-index:-2;
+
+}
+
+@keyframes floatBg{
+
+from{
+
+transform:translateY(-20px);
+
+}
+
+to{
+
+transform:translateY(20px);
+
+}
+
+}
+
+/* Main Container */
+
+.app{
+
+width:92%;
+
+max-width:980px;
+
+height:92vh;
+
+margin:4vh auto;
+
+display:flex;
+
+flex-direction:column;
+
+background:var(--glass);
+
+backdrop-filter:blur(18px);
+
+border:1px solid var(--glass-border);
+
+border-radius:28px;
+
+overflow:hidden;
+
+box-shadow:var(--shadow);
+
+}
+
+/* Header */
+
+.header{
+
+height:85px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:20px 30px;
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+background:rgba(255,255,255,.03);
+
+backdrop-filter:blur(20px);
+
+}
+
+.logo-area{
+
+display:flex;
+
+align-items:center;
+
+gap:18px;
+
+}
+
+.logo-area h1{
+
+font-size:28px;
+
+font-weight:700;
+
+letter-spacing:1px;
+
+}
+
+.logo-area p{
+
+font-size:13px;
+
+color:var(--text-light);
+
+margin-top:4px;
+
+}
+
+/* New Chat Button */
+
+#new-chat{
+
+padding:12px 20px;
+
+background:linear-gradient(
+135deg,
+var(--primary),
+var(--secondary));
+
+border:none;
+
+border-radius:14px;
+
+color:white;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.35s;
+
+box-shadow:0 10px 30px rgba(0,212,255,.25);
+
+}
+
+#new-chat:hover{
+
+transform:translateY(-3px) scale(1.03);
+
+box-shadow:0 20px 40px rgba(0,212,255,.45);
+
+}
+
+/* =====================================
+   NOVA AI - PART 2
+   Chat Area + AI Orb + Messages
+======================================*/
+
+/* ---------- AI Orb ---------- */
+
+.orb{
+
+    width:70px;
+    height:70px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+    135deg,
+    #6C63FF,
+    #00D4FF);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:relative;
+
+    box-shadow:
+    0 0 25px rgba(108,99,255,.6),
+    0 0 60px rgba(0,212,255,.35);
+
+    animation:orbFloat 4s ease-in-out infinite;
+
+}
+
+.orb::before{
+
+content:"";
+
+position:absolute;
+
+width:90px;
+height:90px;
+
+border-radius:50%;
+
+border:2px solid rgba(255,255,255,.08);
+
+animation:rotateRing 10s linear infinite;
+
+}
+
+.orb-core{
+
+width:26px;
+height:26px;
+
+background:white;
+
+border-radius:50%;
+
+box-shadow:
+0 0 20px white,
+0 0 45px white;
+
+animation:pulseCore 2s infinite;
+
+}
+
+@keyframes orbFloat{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-8px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+@keyframes rotateRing{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
+@keyframes pulseCore{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.25);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
+
+/* ---------- Chat Box ---------- */
+
+.chat-box{
+
+flex:1;
+
+padding:30px;
+
+overflow-y:auto;
+
+display:flex;
+
+flex-direction:column;
+
+gap:22px;
+
+scroll-behavior:smooth;
+
+}
+
+/* Scrollbar */
+
+.chat-box::-webkit-scrollbar{
+
+width:8px;
+
+}
+
+.chat-box::-webkit-scrollbar-thumb{
+
+background:#4F46E5;
+
+border-radius:50px;
+
+}
+
+/* ---------- Messages ---------- */
+
+.message{
+
+display:flex;
+
+gap:15px;
+
+align-items:flex-start;
+
+animation:messageAppear .4s ease;
+
+}
+
+@keyframes messageAppear{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/* Avatar */
+
+.avatar{
+
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-weight:700;
+
+flex-shrink:0;
+
+}
+
+.bot-avatar{
+
+background:linear-gradient(
+135deg,
+#6C63FF,
+#00D4FF);
+
+color:white;
+
+box-shadow:0 0 20px rgba(108,99,255,.4);
+
+}
+
+/* Bubble */
+
+.bubble{
+
+padding:18px 22px;
+
+border-radius:20px;
+
+background:rgba(255,255,255,.05);
+
+border:1px solid rgba(255,255,255,.08);
+
+backdrop-filter:blur(12px);
+
+max-width:75%;
+
+transition:.3s;
+
+}
+
+.bubble:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 10px 35px rgba(0,0,0,.25);
+
+}
+
+.bubble h3{
+
+margin-bottom:10px;
+
+font-size:18px;
+
+}
+
+.bubble p{
+
+line-height:1.8;
+
+color:#E2E8F0;
+
+}
+/* =====================================
+   NOVA AI - PART 3
+   Input Area
+======================================*/
+
+.input-container{
+
+    padding:22px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:15px;
+
+    background:rgba(255,255,255,.04);
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+}
+
+/* Text Area */
+
+#user-input{
+
+    flex:1;
+
+    resize:none;
+
+    min-height:60px;
+
+    max-height:180px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:20px;
+
+    padding:18px 20px;
+
+    font-size:16px;
+
+    font-family:'Poppins',sans-serif;
+
+    color:white;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+    overflow-y:auto;
+
+}
+
+#user-input::placeholder{
+
+    color:#94A3B8;
+
+}
+
+#user-input:focus{
+
+    border:1px solid #00D4FF;
+
+    box-shadow:
+
+        0 0 18px rgba(0,212,255,.35),
+
+        0 0 40px rgba(108,99,255,.18);
+
+}
+
+/* Send Button */
+
+#send-btn{
+
+    width:62px;
+
+    height:62px;
+
+    border:none;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:22px;
+
+    background:linear-gradient(
+        135deg,
+        #6C63FF,
+        #00D4FF);
+
+    box-shadow:
+
+        0 10px 30px rgba(108,99,255,.35);
+
+    transition:.35s;
+
+}
+
+#send-btn:hover{
+
+    transform:translateY(-4px) scale(1.08);
+
+    box-shadow:
+
+        0 20px 40px rgba(0,212,255,.45),
+
+        0 0 25px rgba(108,99,255,.35);
+
+}
+
+#send-btn:active{
+
+    transform:scale(.95);
+
+}
+
+/* Floating animation */
+
+#send-btn{
+
+    animation:buttonFloat 3s ease-in-out infinite;
+
+}
+
+@keyframes buttonFloat{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-4px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .app{
+
+        width:96%;
+
+        height:95vh;
+
+    }
+
+    .header{
+
+        padding:18px;
+
+    }
+
+    .logo-area h1{
+
+        font-size:22px;
+
+    }
+
+    .bubble{
+
+        max-width:90%;
+
+    }
+
+    #new-chat{
+
+        display:none;
+
+    }
+
+}
+/* =====================================
+   NOVA AI - PART 4
+   Premium Effects
+======================================*/
+
+/* Floating Animation */
+
+.message:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.bubble{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/* Shine Effect */
+
+.bubble::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-120%;
+
+width:60%;
+
+height:100%;
+
+background:linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.18),
+
+transparent
+
+);
+
+transform:skewX(-25deg);
+
+transition:.8s;
+
+}
+
+.bubble:hover::before{
+
+left:140%;
+
+}
+
+/* Animated Border Glow */
+
+.app{
+
+animation:borderGlow 6s ease infinite;
+
+}
+
+@keyframes borderGlow{
+
+0%{
+
+box-shadow:
+
+0 20px 60px rgba(108,99,255,.25);
+
+}
+
+50%{
+
+box-shadow:
+
+0 25px 80px rgba(0,212,255,.35);
+
+}
+
+100%{
+
+box-shadow:
+
+0 20px 60px rgba(108,99,255,.25);
+
+}
+
+}
+
+/* Floating Background Particles */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+inset:0;
+
+background-image:
+
+radial-gradient(circle,rgba(255,255,255,.18) 1px,transparent 1px);
+
+background-size:55px 55px;
+
+opacity:.08;
+
+animation:particleMove 40s linear infinite;
+
+pointer-events:none;
+
+}
+
+@keyframes particleMove{
+
+from{
+
+transform:translateY(0);
+
+}
+
+to{
+
+transform:translateY(-220px);
+
+}
+
+}
+
+/* Smooth Buttons */
+
+button{
+
+transition:
+
+transform .3s,
+
+box-shadow .3s,
+
+background .3s;
+
+}
+
+/* Orb Glow */
+
+.orb:hover{
+
+box-shadow:
+
+0 0 40px rgba(108,99,255,.7),
+
+0 0 90px rgba(0,212,255,.6);
+
+transform:scale(1.08);
+
+}
+
+/* Bubble Hover */
+
+.bubble:hover{
+
+background:rgba(255,255,255,.08);
+
+}
+
+/* Header Blur */
+
+.header{
+
+backdrop-filter:blur(25px);
+
+}
+
+/* Input Glow */
+
+.input-container{
+
+box-shadow:
+
+0 -5px 25px rgba(0,0,0,.15);
+
+}
+
+/* Send Button Ripple */
+
+#send-btn{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+#send-btn::after{
+
+content:"";
+
+position:absolute;
+
+width:10px;
+
+height:10px;
+
+background:white;
+
+opacity:.4;
+
+border-radius:50%;
+
+transform:scale(0);
+
+transition:.45s;
+
+}
+
+#send-btn:hover::after{
+
+transform:scale(12);
+
+opacity:0;
+
+}
+
+/* Welcome Bubble Animation */
+
+.bot:first-child{
+
+animation:welcome 1s ease;
+
+}
+
+@keyframes welcome{
+
+0%{
+
+opacity:0;
+
+transform:translateY(30px);
+
+}
+
+100%{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/* Nice Text Selection */
+
+::selection{
+
+background:#6C63FF;
+
+color:white;
+
+}
+
+/* Smooth Page Fade */
+
+body{
+
+animation:pageFade .8s ease;
+
+}
+
+@keyframes pageFade{
+
+from{
+
+opacity:0;
+
+}
+
+to{
+
+opacity:1;
+
+}
+
+}
+/* User */
+
+.user{
+
+    justify-content:flex-end;
+
+}
+
+.user .bubble{
+
+    background:linear-gradient(
+    135deg,
+    #6C63FF,
+    #4F46E5);
+
+    color:white;
+
+    border:none;
+
+}
+
+.user-avatar{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    background:#7C3AED;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:bold;
+
+    box-shadow:0 0 20px rgba(124,58,237,.5);
+
+}
+
+/* Typing Dots */
+
+.dot{
+
+display:inline-block;
+
+width:8px;
+
+height:8px;
+
+margin:0 4px;
+
+border-radius:50%;
+
+background:white;
+
+animation:typing 1.2s infinite;
+
+}
+
+.dot:nth-child(2){
+
+animation-delay:.2s;
+
+}
+
+.dot:nth-child(3){
+
+animation-delay:.4s;
+
+}
+
+@keyframes typing{
+
+0%{
+
+transform:translateY(0);
+
+opacity:.3;
+
+}
+
+50%{
+
+transform:translateY(-6px);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translateY(0);
+
+opacity:.3;
+
+}
+
+}
+/* ===========================
+   Better Text Formatting
+=========================== */
+
+.bubble p{
+
+    white-space: pre-wrap;
+
+    line-height: 1.9;
+
+    font-size:16px;
+
+    word-break: break-word;
+
+}
+
+.bubble ul{
+
+    margin-top:12px;
+
+    margin-bottom:12px;
+
+    padding-left:25px;
+
+}
+
+.bubble li{
+
+    margin:8px 0;
+
+}
+
+.bubble h1,
+.bubble h2,
+.bubble h3{
+
+    margin-top:18px;
+
+    margin-bottom:12px;
+
+    color:white;
+
+}
+
+.bubble strong{
+
+    color:#00D4FF;
+
+}
+
+.bubble code{
+
+    background:#1E293B;
+
+    padding:2px 6px;
+
+    border-radius:5px;
+
+    color:#00D4FF;
+
+}
