@@ -1,19 +1,29 @@
 import os
-from dotenv import load_dotenv
-from google import genai
 
-# Load the API key from .env
+try:
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover - depends on environment
+    def load_dotenv():
+        return False
+
+try:
+    from google import genai
+except ImportError:  # pragma: no cover - depends on environment
+    genai = None
+
 load_dotenv()
 
-# Create Gemini client
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
 
-def get_response(user_message):
-    response = client.models.generate_content(
-    model="gemini-2.5-flash",
-    contents=f"""
+def get_client():
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key or genai is None:
+        return None
+    return genai.Client(api_key=api_key)
+
+
+def build_prompt(user_message):
+    cleaned = " ".join((user_message or "").split())
+    return f"""
 You are Nova AI, a professional AI assistant.
 
 Always format your responses nicely.
@@ -28,8 +38,26 @@ Rules:
 - If the answer is long, divide it into sections.
 
 User Question:
-{user_message}
-"""
-)
+{cleaned}
+""".strip()
 
-    return response.text
+
+def get_response(user_message):
+    if not user_message or not str(user_message).strip():
+        return "Please enter a message so I can help you."
+
+    client = get_client()
+    if client is None:
+        return (
+            "I’m ready to help, but the Gemini API key is not configured yet. "
+            "Please add GEMINI_API_KEY to your environment and try again."
+        )
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=build_prompt(user_message),
+        )
+        return (response.text or "I’m here and ready to help.").strip()
+    except Exception:
+        return "I’m having trouble reaching the assistant right now. Please try again in a moment."
